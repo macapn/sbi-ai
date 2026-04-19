@@ -2,18 +2,28 @@ name: S株AI
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 23 * * 0-4"
+    - cron: "0 2 * * 0-4"
+    - cron: "0 5 * * 0-4"
 
 jobs:
   run:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v4   # ★v3→v4に更新
 
-    - uses: actions/setup-python@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5  # ★v4→v5に更新
       with:
         python-version: "3.10"
 
-    - run: pip install yfinance pandas xgboost requests
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install yfinance pandas xgboost requests
 
-    - run: python sbi_ai.py
+    - name: Run AI
+      run: python sbi_ai.py
